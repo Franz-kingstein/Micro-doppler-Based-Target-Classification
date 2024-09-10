@@ -1,7 +1,7 @@
-Flask==3.0.3
-numpy==2.1.1
-scipy==1.14.1
-tensorflow==2.16.1
-tensorflow_intel==2.16.1
-Werkzeug==3.0.4
+Flask
+numpy
+scipy
+tensorflow
+tensorflow_intel
+Werkzeug
 
