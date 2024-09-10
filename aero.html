@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MICRO DOPPLER</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="background">
+        <div class="background-gif"></div> <!-- Added GIF background -->
+        <div class="container1">
+            <h1><b>MICRO DOPPLER BASED TARGET CLASSIFICATION</b></h1>
+        </div>
+        <div class="container2">
+            <h1>DETECTING</h1>         
+
+            <div class="buttons">
+                <form id="uploadForm" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="file" id="uploadMatFile" class="file-upload" accept=".mat">
+                    <br>
+                    <button type="button" class="btn" id="uploadButton">Upload</button>
+                    <button type="button" class="btn" id="predictButton" disabled>Predict</button>
+                    <button type="button" class="btn color-button" id="liveButton">Live</button>
+                </form>
+            </div>
+        </div>
+        <div class="result-box" id="resultBox">
+            {% if result %}
+                <p>Predicted Class: {{ result }}</p>
+            {% else %}
+                <p>Your result will be displayed here.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to handle button clicks and update result box
+        const liveButton = document.getElementById('liveButton');
+        const resultBox = document.getElementById('resultBox');
+        const uploadButton = document.getElementById('uploadButton');
+        const predictButton = document.getElementById('predictButton');
+        const uploadForm = document.getElementById('uploadForm');
+        const uploadMatFile = document.getElementById('uploadMatFile');
+
+        // Toggle Live button color and update result box
+        liveButton.addEventListener('click', function() {
+            liveButton.classList.toggle('red');
+            resultBox.innerHTML = '<p>UNDER PROCESS</p>';
+        });
+
+        // Enable Predict button after file upload
+        uploadButton.addEventListener('click', function() {
+            if (uploadMatFile.files.length > 0) {
+                // Submit the form to upload the file without predicting
+                const formData = new FormData(uploadForm);
+                fetch('/', {
+                    method: 'POST',
+                    body: formData
+                }).then(response => {
+                    if (response.ok) {
+                        resultBox.innerHTML = '<p>File uploaded successfully. You can now click "Predict".</p>';
+                        predictButton.disabled = false;
+                    } else {
+                        resultBox.innerHTML = '<p>File upload failed. Please try again.</p>';
+                    }
+                }).catch(error => {
+                    resultBox.innerHTML = '<p>An error occurred. Please try again.</p>';
+                });
+            } else {
+                alert("Please select a file to upload.");
+            }
+        });
+
+        // Handle Predict button click
+        predictButton.addEventListener('click', function() {
+            if (!predictButton.disabled) {
+                uploadForm.submit();  // This will trigger the form submission and prediction
+            }
+        });
+    </script>
+</body>
+</html>
