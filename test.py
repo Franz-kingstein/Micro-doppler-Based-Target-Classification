@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 import os
 import numpy as np
 import scipy.io
@@ -54,6 +54,7 @@ def predict_class(mat_file_path):
     
     return predicted_class
 
+# HTML form route
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     result = None
@@ -79,5 +80,28 @@ def upload_file():
 
     return render_template('aero.html', result=result)
 
+# New REST API route
+@app.route('/api/predict', methods=['POST'])
+def api_predict():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+        
+        try:
+            # Predict the class
+            result = predict_class(file_path)
+            return jsonify({'prediction': result}), 200  # Ensure this returns JSON
+        except ValueError as e:
+            return jsonify({'error': str(e)}), 400  # Ensure this returns JSON
+
+    return jsonify({'error': 'File not allowed'}), 400  # Ensure this returns JSON
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)  # Change port to 5001 or any available port
