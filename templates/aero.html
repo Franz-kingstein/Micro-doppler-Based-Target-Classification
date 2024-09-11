@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MICRO DOPPLER</title>
-<!--     <link rel="stylesheet" href="{{ url_for('static', filename='static/styles.css') }}"> -->
-    <link rel="stylesheet" href="../static/styles.css">
-    
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!-- Use Flask's url_for -->
 </head>
+
 <body>
     <div class="background">
-        <div class="background-gif"></div> <!-- Added GIF background -->
+        <div class="background-gif"></div> <!-- Background GIF -->
         <div class="container1">
             <h1><b>MICRO DOPPLER BASED TARGET CLASSIFICATION</b></h1>
         </div>
         <div class="container2">
-            <h1>DETECTING</h1>         
+            <h1>DETECTING</h1>
 
             <div class="buttons">
                 <form id="uploadForm" method="POST" enctype="multipart/form-data">
@@ -27,6 +27,7 @@
                 </form>
             </div>
         </div>
+
         <div class="result-box" id="resultBox">
             {% if result %}
                 <p>Predicted Class: {{ result }}</p>
@@ -46,13 +47,13 @@
         const uploadMatFile = document.getElementById('uploadMatFile');
 
         // Toggle Live button color and update result box
-        liveButton.addEventListener('click', function() {
+        liveButton.addEventListener('click', function () {
             liveButton.classList.toggle('red');
             resultBox.innerHTML = '<p>UNDER PROCESS</p>';
         });
 
         // Enable Predict button after file upload
-        uploadButton.addEventListener('click', function() {
+        uploadButton.addEventListener('click', function () {
             if (uploadMatFile.files.length > 0) {
                 // Submit the form to upload the file without predicting
                 const formData = new FormData(uploadForm);
@@ -75,11 +76,13 @@
         });
 
         // Handle Predict button click
-        predictButton.addEventListener('click', function() {
+        predictButton.addEventListener('click', function () {
             if (!predictButton.disabled) {
-                uploadForm.submit();  // This will trigger the form submission and prediction
+                uploadForm.submit(); // This will trigger the form submission and prediction
             }
         });
     </script>
+
 </body>
+
 </html>
