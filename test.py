@@ -6,7 +6,7 @@ import tensorflow as tf
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
 app.config['ALLOWED_EXTENSIONS'] = {'mat'}
 app.secret_key = 'supersecretkey'
 
@@ -78,7 +78,7 @@ def upload_file():
                 flash(str(e))
                 return redirect(request.url)
 
-    return render_template('aero.html', result=result)
+    return render_template('../aero.html', result=result)
 
 # New REST API route
 @app.route('/api/predict', methods=['POST'])
