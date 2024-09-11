@@ -78,7 +78,7 @@ def upload_file():
                 flash(str(e))
                 return redirect(request.url)
 
-    return render_template('aero.html', result=result)
+    return render_template('../aero.html', result=result)
 
 # New REST API route
 @app.route('/api/predict', methods=['POST'])
